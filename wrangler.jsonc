@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rill",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-06-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "rules": [{ "type": "Text", "globs": ["**/*.sql"] }],
+  "d1_databases": [{ "binding": "DB", "database_name": "rill", "migrations_dir": "migrations","database_id": "55e8b687-11f7-4270-a904-40067b88719d" }],
+  "triggers": { "crons": ["* * * * *"] },
+  "queues": {
+    "producers": [{ "binding": "RILL_JOBS", "queue": "rill-jobs" }],
+    "consumers": [{
+      "queue": "rill-jobs",
+      "max_batch_size": 1,
+      "max_batch_timeout": 1,
+      "max_retries": 2,
+      "max_concurrency": 1
+    }]
+  },
+  "observability": { "enabled": true },
+  "vars": {}
+}
